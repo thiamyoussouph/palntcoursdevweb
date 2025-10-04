@@ -1,0 +1,11 @@
+
+name: 🐞 Bug
+description: Déclarer un bug dans un énoncé ou un support
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+    validations:
+      required: true

@@ -1,0 +1,11 @@
+
+name: Checks
+on: [push, pull_request]
+jobs:
+  lint-md:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show tree
+        run: |
+          ls -la

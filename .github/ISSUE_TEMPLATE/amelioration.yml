@@ -1,0 +1,9 @@
+
+name: 💡 Amélioration
+description: Proposer une amélioration
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idée

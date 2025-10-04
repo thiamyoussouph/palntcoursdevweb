@@ -1,0 +1,54 @@
+
+name: Grading (TPs)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Determine PR title
+        id: meta
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setOutput('title', context.payload.pull_request.title)
+      - name: Install deps (none required)
+        run: |
+          echo "No deps"
+      - name: Run grading
+        env:
+          PR_TITLE: ${{ steps.meta.outputs.title }}
+        run: |
+          node scripts/grade.js | tee grading_output.json
+      - name: Upload grades artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: grades
+          path: |
+            grades.json
+            grading_output.json
+      - name: Comment score
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('grades.json', 'utf8'));
+            const score = `${data.score}/${data.total}`;
+            const body = `### 🧮 Résultat auto
+**TP**: ${data.tp || 'non détecté'}
+**Score**: **${score}**
+
+Détails: \n\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``;
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

@@ -1,0 +1,20 @@
+{
+  "TP01": {
+    "README_update": 5,
+    "livrables_complete": 5,
+    "workflow_respect": 5
+  },
+  "TP02": {
+    "semantics_responsive": 7,
+    "layout_card": 4,
+    "css_quality": 4
+  },
+  "TP03": {
+    "dom_events": 6,
+    "update_dom": 6,
+    "code_quality": 3
+  },
+  "TP04": {
+    "tests_pass_rate": 10
+  }
+}

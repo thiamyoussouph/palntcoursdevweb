@@ -1,0 +1,14 @@
+
+# Node
+node_modules/
+.npm/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# General
+.DS_Store
+*.zip
+dist/

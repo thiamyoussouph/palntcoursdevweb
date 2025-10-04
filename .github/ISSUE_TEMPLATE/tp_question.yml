@@ -1,0 +1,19 @@
+
+name: ❓ Question TP
+description: Poser une question claire sur un TP
+labels: [question]
+body:
+  - type: input
+    id: tp
+    attributes:
+      label: TP concerné
+      placeholder: TP01 / TP02 / TP03 / TP04
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Détails
+      description: Contexte, ce que vous avez tenté, erreurs, captures
+    validations:
+      required: true
