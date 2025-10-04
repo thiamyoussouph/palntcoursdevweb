@@ -1,5 +1,5 @@
-
 name: Grading (TPs)
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -7,26 +7,32 @@ on:
 jobs:
   grade:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Determine PR title
-        id: meta
+
+      - name: Get PR title
+        id: prmeta
         uses: actions/github-script@v7
         with:
           script: |
             core.setOutput('title', context.payload.pull_request.title)
-      - name: Install deps (none required)
-        run: |
-          echo "No deps"
+
       - name: Run grading
         env:
-          PR_TITLE: ${{ steps.meta.outputs.title }}
+          PR_TITLE: ${{ steps.prmeta.outputs.title }}
         run: |
           node scripts/grade.js | tee grading_output.json
+
       - name: Upload grades artifact
         uses: actions/upload-artifact@v4
         with:
@@ -34,18 +40,23 @@ jobs:
           path: |
             grades.json
             grading_output.json
+
       - name: Comment score
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const data = JSON.parse(fs.readFileSync('grades.json', 'utf8'));
+            const data = JSON.parse(fs.readFileSync('grades.json','utf8'));
             const score = `${data.score}/${data.total}`;
             const body = `### 🧮 Résultat auto
-**TP**: ${data.tp || 'non détecté'}
-**Score**: **${score}**
+            **TP**: ${data.tp || 'non détecté'}
+            **Score**: **${score}**
 
-Détails: \n\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``;
+            Détails:
+
+            \`\`\`json
+            ${JSON.stringify(data, null, 2)}
+            \`\`\``;
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

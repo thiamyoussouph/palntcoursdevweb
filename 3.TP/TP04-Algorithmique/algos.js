@@ -7,7 +7,8 @@ function sum(a, b) {
 }
 
 function isPrime(n) {
-  if (n < 2) return False; // <-- volontairement incorrect pour montrer la CI : apprenant doit corriger
+  if (n < 2) return false;
+ // <-- volontairement incorrect pour montrer la CI : apprenant doit corriger
 }
 
 function reverseString(s) {
